@@ -49,6 +49,14 @@ class AbsDiff(Operation):
         return abs(a - b)
 
 class OperationFactory:
+    @staticmethod
+    def get_operations_help():
+        help_lines = []
+        for name, cls in OperationFactory.operations.items():
+            doc = cls.__doc__ or "Performs the operation."
+            help_lines.append(f"- {name}: {doc.strip()}")
+        return "\n".join(help_lines)
+
     operations = {
         "add": Add,
         "subtract": Subtract,

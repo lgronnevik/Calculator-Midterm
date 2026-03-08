@@ -2,6 +2,8 @@ from app.operations import OperationFactory
 from app.history import History
 from app.calculator_memento import CalculatorMemento
 from app.calculator_config import CalculatorConfig
+from colorama import init, Fore, Style
+init(autoreset=True, convert=True)
 
 config = CalculatorConfig()
 
@@ -37,7 +39,7 @@ class Calculator:
             calculation = Calculation(op_name, a, b, result)
             self.history.add(calculation)
             self.logger_observer.log_event(f"Performed operation: {op_name}({a}, {b}) = {result}")
-            print(f"Result: {result}")
+            print(Fore.GREEN + f"Result: {result}" + Style.RESET_ALL)
         except Exception as e:
             from app.exceptions import ValidationError, OperationError
             if isinstance(e, ValidationError):
@@ -45,10 +47,10 @@ class Calculator:
                 print(f"Input Error: {e}")
             elif isinstance(e, OperationError):
                 self.logger_observer.log_error(f"Operation Error: {e}")
-                print(f"Operation Error: {e}")
+                print(Fore.RED + f"Operation Error: {e}" + Style.RESET_ALL)
             else:
                 self.logger_observer.log_error(f"Unexpected Error: {e}")
-                print(f"Unexpected Error: {e}")
+                print(Fore.RED + f"Unexpected Error: {e}" + Style.RESET_ALL)
 
     def show_history(self):
         for entry in self.history.all():
@@ -76,7 +78,10 @@ class Calculator:
                 print("Exiting calculator. Goodbye!")
                 break
             elif cmd == "help":
-                print("Commands: add, subtract, multiply, divide, power, root, modulus, int_divide, percent, abs_diff, history, clear, undo, redo, save, load, help, exit")
+                print("Commands:")
+                from app.operations import OperationFactory
+                print(OperationFactory.get_operations_help())
+                print("history, clear, undo, redo, save, load, help, exit")
             elif cmd == "history":
                 self.show_history()
             elif cmd == "clear":

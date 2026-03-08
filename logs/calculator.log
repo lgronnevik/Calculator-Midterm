@@ -254,3 +254,56 @@ INFO:root:divide(8.0, 7.0) = 1.14
 2026-03-07 19:37:33,284 [INFO] Calculation: add(2.0, 3.0) = 5.0
 2026-03-07 19:37:33,289 [INFO] Event: Performed operation: add(2.0, 3.0) = 5.0
 2026-03-07 19:37:43,964 [INFO] Calculation: add(2.0, 3.0) = 5.0
+2026-03-07 20:06:15,479 [INFO] Event: Calculator initialized.
+2026-03-07 20:06:18,447 [INFO] Calculation: add(2.0, 3.0) = 5.0
+2026-03-07 20:06:18,465 [INFO] Event: Performed operation: add(2.0, 3.0) = 5.0
+2026-03-07 20:06:32,030 [ERROR] Error: Unexpected Error: Cannot divide by zero.
+2026-03-07 20:07:33,897 [INFO] Event: Calculator initialized.
+2026-03-07 20:07:37,589 [INFO] Calculation: add(2.0, 3.0) = 5.0
+2026-03-07 20:07:37,597 [INFO] Event: Performed operation: add(2.0, 3.0) = 5.0
+2026-03-07 20:07:49,359 [ERROR] Error: Unexpected Error: Cannot divide by zero.
+2026-03-07 20:08:23,952 [INFO] Event: Calculator initialized.
+2026-03-07 20:08:29,996 [INFO] Calculation: add(3.0, 4.0) = 7.0
+2026-03-07 20:08:30,003 [INFO] Event: Performed operation: add(3.0, 4.0) = 7.0
+2026-03-07 20:08:33,054 [ERROR] Error: Unexpected Error: Cannot divide by zero.
+2026-03-07 20:12:46,797 [INFO] Event: Calculator initialized.
+2026-03-07 20:17:08,088 [INFO] Event: Calculator initialized.
+2026-03-07 20:17:08,096 [INFO] Event: Calculator initialized.
+2026-03-07 20:17:08,097 [INFO] Calculation: add(2, 3) = 5
+2026-03-07 20:17:08,104 [INFO] Event: Performed operation: add(2, 3) = 5
+2026-03-07 20:17:08,111 [INFO] Event: Calculator initialized.
+2026-03-07 20:17:08,111 [INFO] Calculation: add(2, 3) = 5
+2026-03-07 20:17:08,115 [INFO] Event: Performed operation: add(2, 3) = 5
+2026-03-07 20:17:08,132 [INFO] Event: Calculator initialized.
+2026-03-07 20:17:08,132 [INFO] Calculation: add(2, 3) = 5
+2026-03-07 20:17:08,134 [INFO] Event: Performed operation: add(2, 3) = 5
+2026-03-07 20:17:08,164 [INFO] Calculation: add(2, 3) = 5
+2026-03-07 20:17:08,187 [INFO] Event: Calculator initialized.
+2026-03-07 20:17:08,187 [ERROR] Error: Unexpected Error: Unexpected!
+2026-03-07 20:17:08,190 [INFO] Event: Calculator initialized.
+2026-03-07 20:17:08,196 [INFO] Event: Calculator initialized.
+2026-03-07 20:17:08,200 [INFO] Event: Calculator initialized.
+2026-03-07 20:17:08,204 [INFO] Event: Calculator initialized.
+2026-03-07 20:17:08,204 [ERROR] Error: Unexpected Error: Cannot divide by zero.
+2026-03-07 20:17:08,207 [INFO] Event: Calculator initialized.
+2026-03-07 20:17:08,207 [WARNING] Warning: Input Error: Inputs must be numbers.
+2026-03-07 20:17:08,214 [INFO] Event: Calculator initialized.
+2026-03-07 20:17:08,215 [INFO] Calculation: add(2, 3) = 5
+2026-03-07 20:17:08,217 [INFO] Event: Performed operation: add(2, 3) = 5
+2026-03-07 20:17:08,221 [INFO] Event: Calculator initialized.
+2026-03-07 20:17:08,221 [INFO] Calculation: add(2, 3) = 5
+2026-03-07 20:17:08,224 [INFO] Event: Performed operation: add(2, 3) = 5
+2026-03-07 20:17:08,224 [INFO] Calculation: add(2, 3) = 5
+2026-03-07 20:17:08,224 [INFO] Calculation: subtract(5, 2) = 3
+2026-03-07 20:17:08,226 [INFO] Event: Performed operation: subtract(5, 2) = 3
+2026-03-07 20:17:08,227 [INFO] Calculation: add(2, 3) = 5
+2026-03-07 20:17:08,233 [INFO] Calculation: add(2, 3) = 5
+2026-03-07 20:17:08,233 [INFO] Calculation: subtract(5, 2) = 3
+2026-03-07 20:17:08,243 [INFO] Event: Calculator initialized.
+2026-03-07 20:17:08,244 [INFO] Calculation: add(2, 3) = 5
+2026-03-07 20:17:08,248 [INFO] Event: Performed operation: add(2, 3) = 5
+2026-03-07 20:17:08,269 [INFO] Calculation: add(2, 3) = 5
+2026-03-07 20:17:08,304 [INFO] Event: Calculator initialized.
+2026-03-07 20:17:08,304 [INFO] Calculation: add(2.0, 3.0) = 5.0
+2026-03-07 20:17:08,306 [INFO] Event: Performed operation: add(2.0, 3.0) = 5.0
+2026-03-07 20:17:08,309 [INFO] Event: Calculator initialized.
