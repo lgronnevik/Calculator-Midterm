@@ -50,7 +50,8 @@ class AutoSaveObserver:
                 "operation": c.operation,
                 "val1": c.val1,
                 "val2": c.val2,
-                "result": c.result
+                "result": c.result,
+                "timestamp": getattr(c, "timestamp", None)
             } for c in history])
             df.to_csv(self.csv_file, index=False)
         except Exception as e:
@@ -59,10 +60,21 @@ class AutoSaveObserver:
     def load_history(self, history):
         import os, pandas as pd
         if not os.path.exists(self.csv_file):
+            print("History file does not exist.")
             return
-        df = pd.read_csv(self.csv_file)
+        try:
+            df = pd.read_csv(self.csv_file)
+        except Exception as e:
+            print(f"Error loading history file: {e}")
+            return
         history._history.clear()
         for _, row in df.iterrows():
             from app.calculation import Calculation
-            calc = Calculation(row["operation"], row["val1"], row["val2"], row["result"])
+            calc = Calculation(
+                row.get("operation"),
+                row.get("val1"),
+                row.get("val2"),
+                row.get("result"),
+                row.get("timestamp")
+            )
             history.add(calc)
