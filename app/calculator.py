@@ -51,9 +51,8 @@ class Calculator:
                 print(f"Unexpected Error: {e}")
 
     def show_history(self):
-        for entry in self.history.list():
-            op, a, b, result = entry
-            print(f"{op}({a}, {b}) = {result}")
+        for entry in self.history.all():
+            print(f"{entry.operation}({float(entry.val1)}, {float(entry.val2)}) = {float(entry.result)}")
 
     def undo(self):
         snapshot = self.memento.undo()

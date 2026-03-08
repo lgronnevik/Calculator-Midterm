@@ -61,7 +61,7 @@ class AutoSaveObserver:
         if not os.path.exists(self.csv_file):
             return
         df = pd.read_csv(self.csv_file)
-        history.clear()
+        history._history.clear()
         for _, row in df.iterrows():
             from app.calculation import Calculation
             calc = Calculation(row["operation"], row["val1"], row["val2"], row["result"])
