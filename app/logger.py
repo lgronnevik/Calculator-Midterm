@@ -7,24 +7,33 @@ class LoggingObserver:
         self.logger = logging.getLogger()
 
     def update(self, calculation):
-        self.logger.info(f"{calculation.operation}({calculation.val1}, {calculation.val2}) = {calculation.result}")
+        # Accepts either a Calculation object or a list of Calculation objects
+        if isinstance(calculation, list):
+            for c in calculation:
+                self.logger.info(f"{c.operation}({c.val1}, {c.val2}) = {c.result}")
+        else:
+            self.logger.info(f"{calculation.operation}({calculation.val1}, {calculation.val2}) = {calculation.result}")
 
 class AutoSaveObserver:
     def __init__(self, csv_file):
         self.csv_file = csv_file
 
     def update(self, calculation):
-        self.save_history()
+        # Accepts either a Calculation object or a list of Calculation objects
+        if isinstance(calculation, list):
+            self.save_history(calculation)
+        else:
+            self.save_history([calculation])
 
-    def save_history(self, history=None):
-        if history is None:
+    def save_history(self, history):
+        if not history:
             return
         df = pd.DataFrame([{
             "operation": c.operation,
             "val1": c.val1,
             "val2": c.val2,
             "result": c.result
-        } for c in history.get_all()])
+        } for c in history])
         df.to_csv(self.csv_file, index=False)
 
     def load_history(self, history):

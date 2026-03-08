@@ -9,6 +9,12 @@ class Calculator:
     def __init__(self):
         self.history = History(max_size=CALCULATOR_MAX_HISTORY_SIZE)
         self.memento = CalculatorMemento(self.history)
+        # Observer setup
+        from app.logger import LoggingObserver, AutoSaveObserver
+        self.logger_observer = LoggingObserver("calculator.log")
+        self.autosave_observer = AutoSaveObserver("history.csv")
+        self.history.register_observer(self.logger_observer)
+        self.history.register_observer(self.autosave_observer)
 
     def perform_operation(self, op_name, a, b):
         try:
@@ -16,7 +22,9 @@ class Calculator:
             result = operation.execute(a, b)
             # Save history before adding new calculation
             self.memento.save()
-            self.history.add((op_name, a, b, result))
+            from app.calculation import Calculation
+            calculation = Calculation(op_name, a, b, result)
+            self.history.add(calculation)
             print(f"Result: {result}")
         except Exception as e:
             print(f"Error: {e}")
