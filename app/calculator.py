@@ -1,25 +1,37 @@
-# app/calculator.py
 from app.operations import OperationFactory
 from app.history import History
 from app.calculator_memento import CalculatorMemento
+from app.calculator_config import CalculatorConfig
 
-CALCULATOR_MAX_HISTORY_SIZE = 100  # you can make this configurable later
+config = CalculatorConfig()
 
 class Calculator:
     def __init__(self):
-        self.history = History(max_size=CALCULATOR_MAX_HISTORY_SIZE)
+        self.history = History(max_size=config.max_history_size)
         self.memento = CalculatorMemento(self.history)
         # Observer setup
         from app.logger import LoggingObserver, AutoSaveObserver
-        self.logger_observer = LoggingObserver("calculator.log")
-        self.autosave_observer = AutoSaveObserver("history.csv")
+        import os
+        log_path = os.path.join(os.getenv("CALCULATOR_LOG_DIR", "logs"), config.log_file)
+        history_path = os.path.join(os.getenv("CALCULATOR_HISTORY_DIR", "history"), config.history_file)
+        os.makedirs(os.path.dirname(log_path), exist_ok=True)
+        os.makedirs(os.path.dirname(history_path), exist_ok=True)
+        self.logger_observer = LoggingObserver(log_path)
+        self.autosave_observer = AutoSaveObserver(history_path)
         self.history.register_observer(self.logger_observer)
-        self.history.register_observer(self.autosave_observer)
+        if config.auto_save:
+            self.history.register_observer(self.autosave_observer)
 
     def perform_operation(self, op_name, a, b):
         try:
+            # Input validation
+            if abs(a) > config.max_input_value or abs(b) > config.max_input_value:
+                print(f"Error: Input value exceeds maximum allowed ({config.max_input_value})")
+                return
             operation = OperationFactory.get_operation(op_name)
             result = operation.execute(a, b)
+            # Apply precision
+            result = round(result, config.precision)
             # Save history before adding new calculation
             self.memento.save()
             from app.calculation import Calculation
