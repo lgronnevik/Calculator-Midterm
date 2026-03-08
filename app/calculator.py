@@ -21,6 +21,7 @@ class Calculator:
         self.history.register_observer(self.logger_observer)
         if config.auto_save:
             self.history.register_observer(self.autosave_observer)
+        self.logger_observer.log_event("Calculator initialized.")
 
     def perform_operation(self, op_name, a, b):
         try:
@@ -35,14 +36,18 @@ class Calculator:
             from app.calculation import Calculation
             calculation = Calculation(op_name, a, b, result)
             self.history.add(calculation)
+            self.logger_observer.log_event(f"Performed operation: {op_name}({a}, {b}) = {result}")
             print(f"Result: {result}")
         except Exception as e:
             from app.exceptions import ValidationError, OperationError
             if isinstance(e, ValidationError):
+                self.logger_observer.log_warning(f"Input Error: {e}")
                 print(f"Input Error: {e}")
             elif isinstance(e, OperationError):
+                self.logger_observer.log_error(f"Operation Error: {e}")
                 print(f"Operation Error: {e}")
             else:
+                self.logger_observer.log_error(f"Unexpected Error: {e}")
                 print(f"Unexpected Error: {e}")
 
     def show_history(self):

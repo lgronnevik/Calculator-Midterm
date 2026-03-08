@@ -8,3 +8,10 @@ INFO:root:add(2.0, 3.0) = 5.0
 INFO:root:subtract(4.0, 9.0) = -5.0
 INFO:root:multiply(2.0, 5.0) = 10.0
 INFO:root:divide(8.0, 7.0) = 1.14
+2026-03-07 19:18:42,371 [INFO] Event: Calculator initialized.
+2026-03-07 19:18:59,776 [INFO] Calculation: add(2.0, 3.0) = 5.0
+2026-03-07 19:18:59,783 [INFO] Event: Performed operation: add(2.0, 3.0) = 5.0
+2026-03-07 19:19:03,502 [ERROR] Error: Unexpected Error: Cannot divide by zero.
+2026-03-07 19:21:30,609 [INFO] Calculation: add(2.0, 3.0) = 5.0
+2026-03-07 19:21:30,609 [INFO] Calculation: subtract(6.0, 7.0) = -1.0
+2026-03-07 19:21:30,613 [INFO] Event: Performed operation: subtract(6.0, 7.0) = -1.0
