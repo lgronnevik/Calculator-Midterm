@@ -24,10 +24,8 @@ class Calculator:
 
     def perform_operation(self, op_name, a, b):
         try:
-            # Input validation
-            if abs(a) > config.max_input_value or abs(b) > config.max_input_value:
-                print(f"Error: Input value exceeds maximum allowed ({config.max_input_value})")
-                return
+            from app.input_validators import validate_inputs
+            validate_inputs(a, b, config.max_input_value)
             operation = OperationFactory.get_operation(op_name)
             result = operation.execute(a, b)
             # Apply precision
@@ -39,7 +37,13 @@ class Calculator:
             self.history.add(calculation)
             print(f"Result: {result}")
         except Exception as e:
-            print(f"Error: {e}")
+            from app.exceptions import ValidationError, OperationError
+            if isinstance(e, ValidationError):
+                print(f"Input Error: {e}")
+            elif isinstance(e, OperationError):
+                print(f"Operation Error: {e}")
+            else:
+                print(f"Unexpected Error: {e}")
 
     def show_history(self):
         for entry in self.history.list():

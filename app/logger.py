@@ -28,13 +28,17 @@ class AutoSaveObserver:
     def save_history(self, history):
         if not history:
             return
-        df = pd.DataFrame([{
-            "operation": c.operation,
-            "val1": c.val1,
-            "val2": c.val2,
-            "result": c.result
-        } for c in history])
-        df.to_csv(self.csv_file, index=False)
+        try:
+            import pandas as pd
+            df = pd.DataFrame([{
+                "operation": c.operation,
+                "val1": c.val1,
+                "val2": c.val2,
+                "result": c.result
+            } for c in history])
+            df.to_csv(self.csv_file, index=False)
+        except Exception as e:
+            print(f"AutoSave Error: {e}")
 
     def load_history(self, history):
         import os, pandas as pd
