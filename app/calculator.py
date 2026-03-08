@@ -74,15 +74,40 @@ class Calculator:
         while True:
             cmd = input(">> ").strip().lower()
             if cmd == "exit":
+                print("Exiting calculator. Goodbye!")
                 break
             elif cmd == "help":
-                print("Commands: add, subtract, multiply, divide, power, root, modulus, int_divide, percent, abs_diff, history, undo, redo, exit")
+                print("Commands: add, subtract, multiply, divide, power, root, modulus, int_divide, percent, abs_diff, history, clear, undo, redo, save, load, help, exit")
             elif cmd == "history":
                 self.show_history()
+            elif cmd == "clear":
+                self.history._history.clear()
+                self.history._undo_stack.clear()
+                self.history._redo_stack.clear()
+                print("History cleared.")
             elif cmd == "undo":
                 self.undo()
             elif cmd == "redo":
                 self.redo()
+            elif cmd == "save":
+                # Manual save using pandas
+                try:
+                    from app.logger import AutoSaveObserver
+                    observer = AutoSaveObserver(config.history_file)
+                    observer.save_history(self.history.all())
+                    print("History saved to file.")
+                except Exception as e:
+                    print(f"Save Error: {e}")
+            elif cmd == "load":
+                # Manual load using pandas
+                try:
+                    from app.logger import AutoSaveObserver
+                    observer = AutoSaveObserver(config.history_file)
+                    self.history._history.clear()
+                    observer.load_history(self.history)
+                    print("History loaded from file.")
+                except Exception as e:
+                    print(f"Load Error: {e}")
             else:
                 parts = cmd.split()
                 if len(parts) != 3:
