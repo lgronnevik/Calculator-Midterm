@@ -1,78 +1,73 @@
-from app.calculation import Calculation
-from app.calculator_memento import CalculatorMemento
-from app.calculator_config import CalculatorConfig
-from app.history import History
+# app/calculator.py
 from app.operations import OperationFactory
-from app.logger import LoggingObserver, AutoSaveObserver
+from app.history import History
+from app.calculator_memento import CalculatorMemento
 
-CALCULATOR_LOG_FILE = "calculator.log"
-CALCULATOR_HISTORY_FILE = "history.csv"
+CALCULATOR_MAX_HISTORY_SIZE = 100  # you can make this configurable later
 
 class Calculator:
     def __init__(self):
-        self.config = CalculatorConfig()
-        self.history = History()
+        self.history = History(max_size=CALCULATOR_MAX_HISTORY_SIZE)
         self.memento = CalculatorMemento(self.history)
-        self.observers = []
-        self.register_observers()
 
-    def register_observers(self):
-        self.observers.append(LoggingObserver(CALCULATOR_LOG_FILE))
-        self.observers.append(AutoSaveObserver(CALCULATOR_HISTORY_FILE))
+    def perform_operation(self, op_name, a, b):
+        try:
+            operation = OperationFactory.get_operation(op_name)
+            result = operation.execute(a, b)
+            # Save history before adding new calculation
+            self.memento.save()
+            self.history.add((op_name, a, b, result))
+            print(f"Result: {result}")
+        except Exception as e:
+            print(f"Error: {e}")
 
-    def perform_operation(self, operation_name, val1, val2):
-        self.memento.save()
-        op = OperationFactory.get_operation(operation_name)
-        result = op.execute(val1, val2)
-        calc = Calculation(operation_name, val1, val2, result)
-        self.history.add(calc)
-        for observer in self.observers:
-            observer.update(calc)
-        print(f"Result: {result}")
+    def show_history(self):
+        for entry in self.history.list():
+            op, a, b, result = entry
+            print(f"{op}({a}, {b}) = {result}")
+
+    def undo(self):
+        snapshot = self.memento.undo()
+        if snapshot is None:
+            print("Nothing to undo.")
+        else:
+            print("Undo successful.")
+
+    def redo(self):
+        snapshot = self.memento.redo()
+        if snapshot is None:
+            print("Nothing to redo.")
+        else:
+            print("Redo successful.")
 
     def repl(self):
         print("Welcome to the Advanced Calculator! Type 'help' for commands.")
         while True:
-            cmd = input(">> ").strip().split()
-            if not cmd:
-                continue
-            action = cmd[0].lower()
-            args = cmd[1:]
-            if action == "exit":
+            cmd = input(">> ").strip().lower()
+            if cmd == "exit":
                 break
-            elif action == "help":
-                print("Commands: add, subtract, multiply, divide, power, root, "
-                      "modulus, int_divide, percent, abs_diff, history, undo, redo, save, load, exit")
-            elif action in ["add","subtract","multiply","divide","power","root",
-                            "modulus","int_divide","percent","abs_diff"]:
-                if len(args) != 2:
-                    print("Error: Two numeric arguments required.")
+            elif cmd == "help":
+                print("Commands: add, subtract, multiply, divide, power, root, modulus, int_divide, percent, abs_diff, history, undo, redo, exit")
+            elif cmd == "history":
+                self.show_history()
+            elif cmd == "undo":
+                self.undo()
+            elif cmd == "redo":
+                self.redo()
+            else:
+                parts = cmd.split()
+                if len(parts) != 3:
+                    print("Invalid input. Format: operation operand1 operand2")
                     continue
+                op_name, val1, val2 = parts
                 try:
-                    val1, val2 = float(args[0]), float(args[1])
-                    self.perform_operation(action, val1, val2)
+                    val1 = float(val1)
+                    val2 = float(val2)
                 except ValueError:
                     print("Error: Arguments must be numbers.")
-            elif action == "history":
-                self.history.show()
-            elif action == "undo":
-                self.memento.undo()
-            elif action == "redo":
-                self.memento.redo()
-            elif action == "save":
-                for observer in self.observers:
-                    if isinstance(observer, AutoSaveObserver):
-                        observer.save_history(self.history)
-            elif action == "load":
-                for observer in self.observers:
-                    if isinstance(observer, AutoSaveObserver):
-                        observer.load_history(self.history)
-            else:
-                print(f"Unknown command: {action}")
-
-def repl():
-    calc = Calculator()
-    calc.repl()
+                    continue
+                self.perform_operation(op_name, val1, val2)
 
 if __name__ == "__main__":
-    repl()
+    calc = Calculator()
+    calc.repl()

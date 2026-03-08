@@ -1,3 +1,4 @@
+# app/calculator_memento.py
 class CalculatorMemento:
     def __init__(self, history):
         self.history = history
@@ -5,22 +6,26 @@ class CalculatorMemento:
         self.redo_stack = []
 
     def save(self):
-        self.undo_stack.append(self.history.get_all())
+        # Save a snapshot of history
+        self.undo_stack.append(self.history.list()[:])
+        self.redo_stack.clear()
 
     def undo(self):
         if not self.undo_stack:
-            print("Nothing to undo.")
-            return
-        self.redo_stack.append(self.history.get_all())
-        previous = self.undo_stack.pop()
-        self.history._entries = previous
-        print("Undo performed.")
+            return None
+        snapshot = self.undo_stack.pop()
+        self.redo_stack.append(self.history.list()[:])
+        self.history.clear()
+        for item in snapshot:
+            self.history.add(item)
+        return snapshot
 
     def redo(self):
         if not self.redo_stack:
-            print("Nothing to redo.")
-            return
-        self.undo_stack.append(self.history.get_all())
-        next_state = self.redo_stack.pop()
-        self.history._entries = next_state
-        print("Redo performed.")
+            return None
+        snapshot = self.redo_stack.pop()
+        self.undo_stack.append(self.history.list()[:])
+        self.history.clear()
+        for item in snapshot:
+            self.history.add(item)
+        return snapshot
